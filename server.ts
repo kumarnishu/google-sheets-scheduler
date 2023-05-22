@@ -329,9 +329,11 @@ function WhatsappTaskTrigger(index: number) {
     if (!monthf || typeof (monthf) !== "number") monthf = 0
     if (!yearf || typeof (yearf) !== "number") yearf = 0
     let triggers: GoogleAppsScript.Script.Trigger[] = []
+    let skip = false
     if (mf > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyMinutes(mf).create();
         triggers.push(tr)
+        skip = true
     }
     if (hf > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyHours(hf).create();
@@ -420,7 +422,8 @@ function WhatsappTaskTrigger(index: number) {
     }
 
     let tr: GoogleAppsScript.Script.Trigger | undefined = undefined
-    tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().at(date).create();
+    if (!skip)
+        tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().at(date).create();
     if (tr)
         triggers.push(tr)
     triggers.forEach((trigger) => {
@@ -447,7 +450,7 @@ function WhatsappTaskTrigger(index: number) {
 
     if (index)
         TaskSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
-    
+
 }
 
 function TaskFirstRefreshDateUpdater(index: number) {
@@ -1037,6 +1040,7 @@ function SendTaskMessage(e: GoogleAppsScript.Events.TimeDriven) {
             try {
                 let token = PropertiesService.getScriptProperties().getProperty('accessToken')
                 let url = `https://graph.facebook.com/v16.0/${phone_id}/messages`;
+
                 let data = {
                     "messaging_product": "whatsapp",
                     "recipient_type": "individual",
@@ -1053,7 +1057,7 @@ function SendTaskMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].task_title
+                                        "text": triggers[0].task_title||""
                                     }
                                 ]
                             },
@@ -1062,7 +1066,7 @@ function SendTaskMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].task_detail
+                                        "text": triggers[0].task_detail||""
                                     }
                                 ]
                             }
@@ -1334,20 +1338,21 @@ function WhatsappGreetingTrigger(index: number) {
     if (!monthf || typeof (monthf) !== "number") monthf = 0
     if (!yearf || typeof (yearf) !== "number") yearf = 0
     let triggers: GoogleAppsScript.Script.Trigger[] = []
+    let skip = false
     if (mf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyMinutes(mf).create();
         triggers.push(tr)
-       
+        skip = true
     }
     if (hf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyHours(hf).create();
         triggers.push(tr)
-       
+
     }
     if (df > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(df).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-       
+
     }
     if (wf > 0) {
         let weekday = ScriptApp.WeekDay.SUNDAY
@@ -1368,7 +1373,7 @@ function WhatsappGreetingTrigger(index: number) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyWeeks(wf).onWeekDay(weekday)
             .atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-       
+
     }
     if (monthf > 0) {
         let totaldaystoadd = GetMonthDays(date.getFullYear(), date.getMonth()) - date.getDate()
@@ -1378,12 +1383,12 @@ function WhatsappGreetingTrigger(index: number) {
         }
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(totaldaystoadd).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-       
+
     }
     if (yearf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(GetYearDays(date.getFullYear()) * yearf).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
         triggers.push(tr)
-       
+
     }
     if (weekdays.length > 0) {
         weekdays.split(",").forEach((wd) => {
@@ -1422,18 +1427,19 @@ function WhatsappGreetingTrigger(index: number) {
 
             }
         })
-       
+
     }
     if (monthdays.length > 0) {
         monthdays.split(",").forEach((md) => {
             let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().onMonthDay(Number(md)).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
             triggers.push(tr)
         })
-       
+
     }
 
     let tr: GoogleAppsScript.Script.Trigger | undefined = undefined
-    tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().at(date).create();
+    if (!skip)
+        tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().at(date).create();
     if (tr)
         triggers.push(tr)
     triggers.forEach((trigger) => {
@@ -1460,7 +1466,7 @@ function WhatsappGreetingTrigger(index: number) {
 
     if (index)
         GreetingSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
-    
+
 }
 
 function GreetingFirstRefreshDateUpdater(index: number) {
@@ -2017,7 +2023,7 @@ function SendGreetingMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "image",
-                                        "image": { "link": triggers[0].greeting_image }
+                                        "image": { "link": triggers[0].greeting_image ||"https://m.media-amazon.com/images/S/aplus-media-library-service-media/1b071a81-102f-4883-9d02-7196a9c76eb9.__CR133,0,1099,680_PT0_SX970_V1___.jpeg" }
                                     }
                                 ]
                             },
@@ -2026,7 +2032,7 @@ function SendGreetingMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].greeting_detail
+                                        "text": triggers[0].greeting_detail||""
                                     }
                                 ]
                             }
