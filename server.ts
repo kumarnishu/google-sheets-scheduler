@@ -160,6 +160,7 @@ function StartTaskScheduler() {
             let phone = String(TaskSheet?.getRange(i, 10).getValue())
             if (autoStop.toLowerCase() !== "stop" && task_status.toLowerCase() !== "done" && scheduler_status.toLowerCase() !== "running" && scheduler_status.toLowerCase() !== "ready" && phone) {
                 SetUpTaskStartDateTrigger(i)
+                TaskFirstRefreshDateUpdater(i)
             }
         }
     }
@@ -328,21 +329,17 @@ function WhatsappTaskTrigger(index: number) {
     if (!monthf || typeof (monthf) !== "number") monthf = 0
     if (!yearf || typeof (yearf) !== "number") yearf = 0
     let triggers: GoogleAppsScript.Script.Trigger[] = []
-    let frequency = false
     if (mf > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyMinutes(mf).create();
         triggers.push(tr)
-        frequency = true
     }
     if (hf > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyHours(hf).create();
         triggers.push(tr)
-        frequency = true
     }
     if (df > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyDays(df).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
     }
     if (wf > 0) {
         let weekday = ScriptApp.WeekDay.SUNDAY
@@ -363,7 +360,6 @@ function WhatsappTaskTrigger(index: number) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyWeeks(wf).onWeekDay(weekday)
             .atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
     }
     if (monthf > 0) {
         let totaldaystoadd = GetMonthDays(date.getFullYear(), date.getMonth()) - date.getDate()
@@ -373,12 +369,10 @@ function WhatsappTaskTrigger(index: number) {
         }
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyDays(totaldaystoadd).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
     }
     if (yearf > 0) {
         let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().everyDays(GetYearDays(date.getFullYear()) * yearf).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
         triggers.push(tr)
-        frequency = true
     }
     if (weekdays.length > 0) {
         weekdays.split(",").forEach((wd) => {
@@ -417,19 +411,16 @@ function WhatsappTaskTrigger(index: number) {
 
             }
         })
-        frequency = true
     }
     if (monthdays.length > 0) {
         monthdays.split(",").forEach((md) => {
             let tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().onMonthDay(Number(md)).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
             triggers.push(tr)
         })
-        frequency = true
     }
 
     let tr: GoogleAppsScript.Script.Trigger | undefined = undefined
-    if (!frequency)
-        tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().at(date).create();
+    tr = ScriptApp.newTrigger('SendTaskMessage').timeBased().at(date).create();
     if (tr)
         triggers.push(tr)
     triggers.forEach((trigger) => {
@@ -456,8 +447,7 @@ function WhatsappTaskTrigger(index: number) {
 
     if (index)
         TaskSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
-    TaskLastDateUpdater(index)
-    TaskFirstRefreshDateUpdater(index)
+    
 }
 
 function TaskFirstRefreshDateUpdater(index: number) {
@@ -1175,6 +1165,7 @@ function StartGreetingScheduler() {
             let phone = String(GreetingSheet?.getRange(i, 10).getValue())
             if (autoStop.toLowerCase() !== "stop" && greeting_status.toLowerCase() !== "done" && scheduler_status.toLowerCase() !== "running" && scheduler_status.toLowerCase() !== "ready" && phone) {
                 SetUpGreetingStartDateTrigger(i)
+                GreetingFirstRefreshDateUpdater(i)
             }
         }
     }
@@ -1343,21 +1334,20 @@ function WhatsappGreetingTrigger(index: number) {
     if (!monthf || typeof (monthf) !== "number") monthf = 0
     if (!yearf || typeof (yearf) !== "number") yearf = 0
     let triggers: GoogleAppsScript.Script.Trigger[] = []
-    let frequency = false
     if (mf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyMinutes(mf).create();
         triggers.push(tr)
-        frequency = true
+       
     }
     if (hf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyHours(hf).create();
         triggers.push(tr)
-        frequency = true
+       
     }
     if (df > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(df).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
+       
     }
     if (wf > 0) {
         let weekday = ScriptApp.WeekDay.SUNDAY
@@ -1378,7 +1368,7 @@ function WhatsappGreetingTrigger(index: number) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyWeeks(wf).onWeekDay(weekday)
             .atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
+       
     }
     if (monthf > 0) {
         let totaldaystoadd = GetMonthDays(date.getFullYear(), date.getMonth()) - date.getDate()
@@ -1388,12 +1378,12 @@ function WhatsappGreetingTrigger(index: number) {
         }
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(totaldaystoadd).atHour(date.getHours()).nearMinute(date.getMinutes()).create()
         triggers.push(tr)
-        frequency = true
+       
     }
     if (yearf > 0) {
         let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().everyDays(GetYearDays(date.getFullYear()) * yearf).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
         triggers.push(tr)
-        frequency = true
+       
     }
     if (weekdays.length > 0) {
         weekdays.split(",").forEach((wd) => {
@@ -1432,19 +1422,18 @@ function WhatsappGreetingTrigger(index: number) {
 
             }
         })
-        frequency = true
+       
     }
     if (monthdays.length > 0) {
         monthdays.split(",").forEach((md) => {
             let tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().onMonthDay(Number(md)).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
             triggers.push(tr)
         })
-        frequency = true
+       
     }
 
     let tr: GoogleAppsScript.Script.Trigger | undefined = undefined
-    if (!frequency)
-        tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().at(date).create();
+    tr = ScriptApp.newTrigger('SendGreetingMessage').timeBased().at(date).create();
     if (tr)
         triggers.push(tr)
     triggers.forEach((trigger) => {
@@ -1471,8 +1460,7 @@ function WhatsappGreetingTrigger(index: number) {
 
     if (index)
         GreetingSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
-    GreetingLastDateUpdater(index)
-    GreetingFirstRefreshDateUpdater(index)
+    
 }
 
 function GreetingFirstRefreshDateUpdater(index: number) {
