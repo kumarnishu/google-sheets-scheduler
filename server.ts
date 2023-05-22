@@ -582,41 +582,37 @@ function SetUpTaskRefreshDateTrigger(index: number, refresh_date: Date) {
         triggers.push(tr)
     }
     if (weekdays.length > 0) {
+        let weekday = ScriptApp.WeekDay.SUNDAY
         weekdays.split(",").forEach((wd) => {
             if (wd.toLowerCase() === "sun") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.SUNDAY
             }
             if (wd.toLowerCase() === "mon") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.MONDAY
 
             }
             if (wd.toLowerCase() === "tue") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.TUESDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.TUESDAY
 
             }
             if (wd.toLowerCase() === "wed") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.WEDNESDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.WEDNESDAY
 
             }
             if (wd.toLowerCase() === "thu") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.THURSDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.THURSDAY
 
             }
             if (wd.toLowerCase() === "fri") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.FRIDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.FRIDAY
 
             }
             if (wd.toLowerCase() === "sat") {
-                let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.SATURDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.SATURDAY
 
             }
+            let tr = ScriptApp.newTrigger('TaskRefreshDateTrigger').timeBased().onWeekDay(weekday).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
+            triggers.push(tr)
         })
     }
     if (monthdays.length > 0) {
@@ -1057,7 +1053,7 @@ function SendTaskMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].task_title||""
+                                        "text": triggers[0].task_title
                                     }
                                 ]
                             },
@@ -1066,7 +1062,7 @@ function SendTaskMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].task_detail||""
+                                        "text": triggers[0].task_detail
                                     }
                                 ]
                             }
@@ -1597,42 +1593,39 @@ function SetUpGreetingRefreshDateTrigger(index: number, refresh_date: Date) {
         let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().everyDays(GetYearDays(date.getFullYear()) * yearf).atHour(date.getHours()).nearMinute(date.getMinutes()).create();
         triggers.push(tr)
     }
+   
     if (weekdays.length > 0) {
+        let weekday = ScriptApp.WeekDay.SUNDAY
         weekdays.split(",").forEach((wd) => {
             if (wd.toLowerCase() === "sun") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.SUNDAY
             }
             if (wd.toLowerCase() === "mon") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.MONDAY
 
             }
             if (wd.toLowerCase() === "tue") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.TUESDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.TUESDAY
 
             }
             if (wd.toLowerCase() === "wed") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.WEDNESDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.WEDNESDAY
 
             }
             if (wd.toLowerCase() === "thu") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.THURSDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.THURSDAY
 
             }
             if (wd.toLowerCase() === "fri") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.FRIDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.FRIDAY
 
             }
             if (wd.toLowerCase() === "sat") {
-                let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(ScriptApp.WeekDay.SATURDAY).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
-                triggers.push(tr)
+                weekday = ScriptApp.WeekDay.SATURDAY
 
             }
+            let tr = ScriptApp.newTrigger('GreetingRefreshDateTrigger').timeBased().onWeekDay(weekday).atHour(refresh_date.getHours()).nearMinute(refresh_date.getMinutes()).create();
+            triggers.push(tr)
         })
     }
     if (monthdays.length > 0) {
@@ -2023,7 +2016,7 @@ function SendGreetingMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "image",
-                                        "image": { "link": triggers[0].greeting_image ||"https://m.media-amazon.com/images/S/aplus-media-library-service-media/1b071a81-102f-4883-9d02-7196a9c76eb9.__CR133,0,1099,680_PT0_SX970_V1___.jpeg" }
+                                        "image": { "link": triggers[0].greeting_image }
                                     }
                                 ]
                             },
@@ -2032,7 +2025,7 @@ function SendGreetingMessage(e: GoogleAppsScript.Events.TimeDriven) {
                                 "parameters": [
                                     {
                                         "type": "text",
-                                        "text": triggers[0].greeting_detail||""
+                                        "text": triggers[0].greeting_detail
                                     }
                                 ]
                             }
