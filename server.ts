@@ -642,6 +642,7 @@ function SetUpTaskRefreshDateTrigger(index: number, refresh_date: Date) {
     })
     if (index)
         TaskSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
+        TaskRefreshDateUpdater(index)
 }
 function TaskRefreshDateTrigger(e: GoogleAppsScript.Events.TimeDriven) {
     let triggers = findAllTaskTriggers().filter((trigger) => {
@@ -1655,6 +1656,7 @@ function SetUpGreetingRefreshDateTrigger(index: number, refresh_date: Date) {
     })
     if (index)
         GreetingSheet?.getRange(index, 2).setValue("running").setFontWeight('bold')
+        GreetingRefreshDateUpdater(index)
 }
 function GreetingRefreshDateTrigger(e: GoogleAppsScript.Events.TimeDriven) {
     let triggers = findAllGreetingTriggers().filter((trigger) => {
